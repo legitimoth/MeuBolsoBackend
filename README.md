@@ -1,3 +1,5 @@
+![Meu Bolso Backend](banner.jpg "meu bolso backend")
+
 # 💼 MeuBolsoBackend
 
 Backend desenvolvido em .NET Core 9 para o sistema de controle de finanças pessoais: **MeuBolso**.
