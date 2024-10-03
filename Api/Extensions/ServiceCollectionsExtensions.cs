@@ -31,10 +31,6 @@ public static class ServiceCollectionsExtensions
         {
             options.Authority = configuration["Auth0:Domain"];
             options.Audience = configuration["Auth0:Audience"];
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                // Configurações adicionais, se necessário
-            };
         });
     }
 
