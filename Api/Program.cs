@@ -1,22 +1,13 @@
-using MeuBolso.Api.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
+using MeuBolso.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<ContextDB>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Adiciona serviços personalizados
+builder.Services.AddCustomServices(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+// Configura o pipeline de processamento de requisições
+app.UseCustomConfiguration(app.Environment);
 
-app.UseHttpsRedirection();
-app.MapControllers();
 app.Run();
