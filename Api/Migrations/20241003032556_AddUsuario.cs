@@ -20,7 +20,8 @@ namespace MeuBolso.Api.Migrations
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Sobrenome = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Renda = table.Column<decimal>(type: "numeric", nullable: false)
+                    Renda = table.Column<decimal>(type: "numeric", nullable: true),
+                    AuthId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
