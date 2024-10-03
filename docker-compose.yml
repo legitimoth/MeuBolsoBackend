@@ -1,0 +1,30 @@
+version: '3.8'
+name: meu-bolso
+
+services:
+  meu-bolso-db:
+    image: postgres:15-alpine
+    container_name: meu-bolso-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: meu-bolso
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  meu-bolso-api:
+    build:
+      context: .
+      dockerfile: ./Api/Dockerfile
+    container_name: meu-bolso-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - meu-bolso-db
+
+volumes:
+  postgres-data:
