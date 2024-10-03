@@ -9,7 +9,7 @@ public static class ApplicationBuilderExtensions
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Meu Bolso 💲");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", app.Configuration["App:Name"]);
                 c.RoutePrefix = string.Empty; // Swagger UI na raiz
 
                 var auth0Domain = app.Configuration["Auth0:Domain"];
@@ -17,7 +17,7 @@ public static class ApplicationBuilderExtensions
                 var auth0Audience = app.Configuration["Auth0:Audience"];
 
                 c.OAuthClientId(auth0ClientId);
-                c.OAuthAppName("Meu Bolso 💲 - Swagger");
+                c.OAuthAppName($"{app.Configuration["App:Name"]} - Swagger");
                 c.OAuthUsePkce(); // Habilita PKCE
                 c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
                 {
