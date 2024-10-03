@@ -1,24 +1,36 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MeuBolso.Api.Dtos;
+using MeuBolso.Api.Interfaces.Services;
 
 namespace MeuBolso.Api.Controllers
 {
     [Route("api/usuarios")]
     [ApiController]
     [Authorize]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController(IUsuarioService service) : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<UsuarioDto> Get()
+
+        private readonly IUsuarioService _service = service;
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsuarioDto>> GetById(long id)
         {
-            return new UsuarioDto
+            var usuario = await _service.RecuperarPorIdAsync(id);
+            if (usuario == null)
             {
-                Id = 1,
-                Nome = "",
-                Sobrenome = "",
-                Email = "",
-            };
+                return NotFound();
+            }
+
+            return Ok(usuario);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UsuarioDto>> Post([FromBody] UsuarioManterDto dto)
+        {
+            var usuario = await _service.AddAsync(dto);
+
+            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
         }
     }
 }

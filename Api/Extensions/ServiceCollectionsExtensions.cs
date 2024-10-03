@@ -1,7 +1,6 @@
 using MeuBolso.Api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace MeuBolso.Api.Extensions;
@@ -13,7 +12,11 @@ public static class ServiceCollectionsExtensions
         DbContext(services, configuration);
         Auth(services, configuration);
         Swagger(services, configuration);
+
         // Outros serviços
+        services.RegisterServices();
+        services.RegisterRepositories();
+        services.AddAutoMapper(typeof(Program));
         services.AddControllers();
         services.AddOpenApi();
 
@@ -80,7 +83,7 @@ public static class ServiceCollectionsExtensions
 
     private static void DbContext(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ContextDB>(options =>
+        services.AddDbContext<AppDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
     }
 }

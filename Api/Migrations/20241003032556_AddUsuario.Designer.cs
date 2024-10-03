@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MeuBolso.Api.Migrations
 {
-    [DbContext(typeof(ContextDB))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20241003032556_AddUsuario")]
     partial class AddUsuario
     {
