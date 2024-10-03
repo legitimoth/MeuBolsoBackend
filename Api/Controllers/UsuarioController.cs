@@ -1,7 +1,6 @@
-using MeuBolso.Api.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MeuBolso.Api.Dtos;
 
 namespace MeuBolso.Api.Controllers
 {
