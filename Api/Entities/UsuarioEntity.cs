@@ -6,5 +6,4 @@ public class UsuarioEntity
     public required string Sobrenome { get; set; }
     public required string Email { get; set; }
     public decimal? Renda { get; set; }
-    public required string AuthId { get; set; }
 }

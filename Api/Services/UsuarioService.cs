@@ -3,14 +3,16 @@ using MeuBolso.Api.Interfaces.Repositories;
 using MeuBolso.Api.Dtos;
 using MeuBolso.Api.Entities;
 using AutoMapper;
+using System.Security.Claims;
 
 namespace MeuBolso.Api.Services;
 
-public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnitOfWork unitOfWork) : IUsuarioService
+public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor) : IUsuarioService
 {
     private readonly IUsuarioRepository _repository = repository;
     private readonly IMapper _mapper = mapper;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<UsuarioDto> RecuperarPorIdAsync(long id)
     {
@@ -19,12 +21,19 @@ public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnit
         return _mapper.Map<UsuarioDto>(usuario);
     }
 
-    public async Task<UsuarioDto> AddAsync(UsuarioManterDto dto)
+    public async Task<UsuarioDto> AddAsync()
     {
-        var usuario = await _repository.RecuperarPorEmailAsync(dto.Email);
+        var usuarioInfo = _httpContextAccessor.HttpContext?.User;
+        var email = (usuarioInfo?.FindFirst("emailAddress")?.Value) ?? throw new UnauthorizedAccessException("Não foi possível recuperar o e-mail do usuário.");
+        var usuario = await _repository.RecuperarPorEmailAsync(email);
 
         if(usuario == null) {
-            usuario = _mapper.Map<UsuarioEntity>(dto);
+            usuario = new UsuarioEntity()
+            {
+                Nome = usuarioInfo?.FindFirst("firstName")?.Value ?? "",
+                Sobrenome = usuarioInfo?.FindFirst("lastName")?.Value ?? "",
+                Email = email
+            };
             await _repository.AddAsync(usuario);
             await _unitOfWork.SaveAsync();
         }

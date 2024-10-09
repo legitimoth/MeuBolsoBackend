@@ -17,7 +17,10 @@ public static class ServiceCollectionsExtensions
         services.RegisterServices();
         services.RegisterRepositories();
         services.AddAutoMapper(typeof(Program));
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.SuppressAsyncSuffixInActionNames = false;
+        });
         services.AddOpenApi();
 
         return services;
@@ -79,6 +82,7 @@ public static class ServiceCollectionsExtensions
             options.Authority = configuration["Auth0:Domain"];
             options.Audience = configuration["Auth0:Audience"];
         });
+        services.AddHttpContextAccessor();
     }
 
     private static void DbContext(IServiceCollection services, IConfiguration configuration)
