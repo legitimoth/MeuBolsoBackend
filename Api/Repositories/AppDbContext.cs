@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeuBolso.Api.Repositories;
 
-public class ContextDB(DbContextOptions<ContextDB> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<UsuarioEntity> Usuarios { get; set; }
 }
