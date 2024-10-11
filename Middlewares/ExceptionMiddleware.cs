@@ -32,6 +32,6 @@ public class ExceptionMiddleware(RequestDelegate next)
 
         context.Response.StatusCode = statusCode;
 
-        return context.Response.WriteAsJsonAsync(ApiResponse<string>.FailureResponse(message));
+        return context.Response.WriteAsJsonAsync(ApiResponseDto<string>.FailureResponse(message));
     }
 }

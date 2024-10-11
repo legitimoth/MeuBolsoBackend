@@ -21,14 +21,14 @@ public class AuthenticationMiddleware(RequestDelegate next)
     private static Task HandleUnauthorizedAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
-        var response = ApiResponse<string>.FailureResponse(Message.UsuarioNaoAutenticado);
+        var response = ApiResponseDto<string>.FailureResponse(Message.UsuarioNaoAutenticado);
         return context.Response.WriteAsJsonAsync(response);
     }
 
     private static Task HandleForbiddenAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
-        var response = ApiResponse<string>.FailureResponse(Message.UsuarioSemPermissao);
+        var response = ApiResponseDto<string>.FailureResponse(Message.UsuarioSemPermissao);
         return context.Response.WriteAsJsonAsync(response);
     }
 }
