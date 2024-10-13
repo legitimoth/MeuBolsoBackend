@@ -13,10 +13,16 @@ public class AuthService : IAuthService
         UsuarioInfo = _httpContextAccessor.HttpContext?.User;
     }
 
+    public long RecuperarId()
+    {
+        var usuarioId = (UsuarioInfo?.FindFirst("meuBolsoId")?.Value) ?? throw new ClaimNotFoundException(Message.UsuarioSemId);
+
+        return StrUtils.ToLong(usuarioId);
+    }
 
     public string RecuperarEmail()
     {
-        return (UsuarioInfo?.FindFirst("emailAddress")?.Value) ?? throw new BusinessException(Message.UsuarioSemEmail);
+        return (UsuarioInfo?.FindFirst("emailAddress")?.Value) ?? throw new ClaimNotFoundException(Message.UsuarioSemEmail);
     }
 
     public string RecuperarNome()

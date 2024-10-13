@@ -7,6 +7,7 @@ public static class ServiceExtensions
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ICartaoService, CartaoService>();
 
         return services;
     }
@@ -16,6 +17,7 @@ public static class ServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<ICartaoRepository, CartaoRepository>();
 
         return services;
     }

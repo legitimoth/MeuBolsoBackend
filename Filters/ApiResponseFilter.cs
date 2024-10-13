@@ -7,9 +7,9 @@ public class ApiResponseFilter : IAsyncResultFilter
 {
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
-        if (context.Result is ObjectResult objectResult && objectResult.Value is not ApiResponse<object>)
+        if (context.Result is ObjectResult objectResult && objectResult.Value is not ApiResponseDto<object>)
         {
-            var apiResponse = new ApiResponse<object>(objectResult.Value, true);
+            var apiResponse = new ApiResponseDto<object>(objectResult.Value, true);
 
             context.Result = new ObjectResult(apiResponse)
             {

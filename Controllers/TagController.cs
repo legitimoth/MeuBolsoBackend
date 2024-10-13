@@ -15,7 +15,7 @@ public class TagController(ITagService tagService) : ControllerBase
     {
         var tagDto = await _tagService.AdicionarAsync(tagManterDto);
 
-        return CreatedAtAction(nameof(RecuperarPorIdAsync), new { id = tagDto.Id }, tagDto);
+        return CreatedAtAction(nameof(RecuperarPorIdAsync), tagDto);
     }
 
     [HttpPut("{id}")]

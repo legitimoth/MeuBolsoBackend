@@ -14,7 +14,7 @@ public class ModelValidationFilter : IActionFilter
                 .Select(e => e.ErrorMessage)
                 .ToList();
 
-            var response = ApiResponse<string>.FailureResponse(errors);
+            var response = ApiResponseDto<string>.FailureResponse(errors);
             context.Result = new BadRequestObjectResult(response);
         }
     }
