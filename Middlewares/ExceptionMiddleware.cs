@@ -2,9 +2,10 @@ using System.Net.Mime;
 
 namespace MeuBolsoBackend;
 
-public class ExceptionMiddleware(RequestDelegate next)
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
 {
     private readonly RequestDelegate _next = next;
+    private readonly ILogger<ExceptionMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
@@ -18,17 +19,41 @@ public class ExceptionMiddleware(RequestDelegate next)
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-        (int statusCode, string message) = exception switch
+        int statusCode;
+        string message;
+
+        switch (exception)
         {
-            BusinessException => (StatusCodes.Status400BadRequest, exception.Message),
-            NotFoundException => (StatusCodes.Status404NotFound, exception.Message),
-            ConflictException => (StatusCodes.Status409Conflict, exception.Message),
-            _ => (StatusCodes.Status500InternalServerError, Message.ErroInesperado)
-        };
+            case BusinessException:
+                statusCode = StatusCodes.Status400BadRequest;
+                message = exception.Message;
+                break;
+            case NotFoundException:
+                statusCode = StatusCodes.Status404NotFound;
+                message = exception.Message;
+                break;
+            case ConflictException:
+                statusCode = StatusCodes.Status409Conflict;
+                message = exception.Message;
+                break;
+            case ClaimNotFoundException:
+                statusCode = StatusCodes.Status401Unauthorized;
+                message = exception.Message;
+                break;
+            case FormatException:
+                statusCode = StatusCodes.Status500InternalServerError;
+                message = exception.Message;
+                break;
+            default:
+                _logger.LogError(exception, "Ocorreu um erro inesperado.");
+                statusCode = StatusCodes.Status500InternalServerError;
+                message = Message.ErroInesperado;
+                break;
+        }
 
         context.Response.StatusCode = statusCode;
 

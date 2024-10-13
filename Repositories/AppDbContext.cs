@@ -6,6 +6,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<UsuarioEntity> Usuarios { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
+    public DbSet<CartaoEntity> Cartoes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

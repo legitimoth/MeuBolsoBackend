@@ -31,7 +31,7 @@ public class TagRepository(AppDbContext context) : ITagRepository
 
     public async Task<bool> ExistePorNomeEUsuarioIdAsync(string nome, long usuarioId)
     {
-        return await _context.Tags.AnyAsync(t => t.Nome == nome && t.UsuarioId == usuarioId);
+        return await _context.Tags.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper() && t.UsuarioId == usuarioId);
     }
 
     public async Task RemoverPorIdAsync(long id)
