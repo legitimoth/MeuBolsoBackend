@@ -22,15 +22,32 @@ public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnit
         var email = _authService.RecuperarEmail();
         var usuario = await _repository.RecuperarPorEmailAsync(email);
 
-        if(usuario == null) {
-            usuario = new UsuarioEntity()
+        if (usuario != null)
+        {
+            throw new ConflictException(Message.RegistroDuplicado.Bind("Usuário"));
+        }
+
+        usuario = new UsuarioEntity()
+        {
+            Nome = _authService.RecuperarNome(),
+            Sobrenome = _authService.RecuperarSobrenome(),
+            Email = email
+        };
+
+        using (var transaction = await _unitOfWork.BeginTransactionAsync())
+        {
+            try
             {
-                Nome = _authService.RecuperarNome(),
-                Sobrenome = _authService.RecuperarSobrenome(),
-                Email = email
-            };
-            await _repository.AdicionarAsync(usuario);
-            await _unitOfWork.SaveAsync();
+                await _repository.AdicionarAsync(usuario);
+                await _unitOfWork.SaveAsync();
+                await _authService.RegistrarUsuario(usuario.Id);
+                await transaction.CommitAsync();
+            }
+            catch(Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         return _mapper.Map<UsuarioDto>(usuario);

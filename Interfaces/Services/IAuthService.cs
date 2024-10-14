@@ -6,4 +6,5 @@ public interface IAuthService
     long RecuperarId();
     string RecuperarNome();
     string RecuperarSobrenome();
+    Task RegistrarUsuario(long usuarioId);
 }

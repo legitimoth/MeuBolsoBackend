@@ -13,8 +13,8 @@ public static class ApplicationBuilderExtensions
                 c.RoutePrefix = string.Empty; // Swagger UI na raiz
 
                 var auth0Domain = app.Configuration["Auth0:Domain"];
-                var auth0ClientId = app.Configuration["Auth0:ClientId"];
-                var auth0Audience = app.Configuration["Auth0:Audience"];
+                var auth0ClientId = app.Configuration["Auth0:Api:ClientId"];
+                var auth0Audience = app.Configuration["Auth0:Api:Audience"];
 
                 c.OAuthClientId(auth0ClientId);
                 c.OAuthAppName($"{app.Configuration["App:Name"]} - Swagger");
