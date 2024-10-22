@@ -21,17 +21,25 @@ public static class Message
     public const string CartaoDuplicado = "O cartão que você está tentando adicionar já existe.";
     #endregion
 
+    #region Auth0
+    public const string Auth0NaoConfigurado = "{0} do Auth0 não foi configurado.";
+    public const string Auth0ErroAoGerarTokenApi = "Não foi possível gerar o Token da API";
+    #endregion
+
     #region Validation
     public const string CampoObrigatorio = "{0} é obrigatório(a).";
     public const string MaxCaracteres = "{0} deve ter no máximo {1} caracteres.";
     public const string MinCaracteres = "{0} deve ter no mínimo {1} caracteres.";
     public const string CorInvalida = "A cor deve estar no formato hexadecimal, começando com '#' e contendo 3 ou 6 caracteres.";
     public const string IdMaiorQueZero = "O ID deve ser maior que zero.";
+    public const string UrlInvalida = "{0} não é uma URL válida.";
+    public const string RegistroDuplicado = "{0} já cadastrado.";
     #endregion
 
     #region Erro
     public const string ErroInesperado = "Um erro inesperado aconteceu.";
     public const string ErroParseLong = "Não foi possível converter o valor {0} para Long";
+    public const string ConfiguracaoNaoEncontrada = "Não foi possível recuperar a configuração {0}";
     #endregion
 
     #region Generico

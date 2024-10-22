@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace MeuBolsoBackend;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
@@ -7,5 +9,10 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     public async Task SaveAsync()
     {
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await _context.Database.BeginTransactionAsync();
     }
 }

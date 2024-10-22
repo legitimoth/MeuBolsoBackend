@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MeuBolsoBackend;
 
@@ -21,6 +22,7 @@ public static class ServiceCollectionsExtensions
         services.AddAutoMapper(typeof(Program));
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+        services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
@@ -47,7 +49,7 @@ public static class ServiceCollectionsExtensions
 
             // Configuração do OAuth2 com Auth0
             var auth0Domain = configuration["Auth0:Domain"];
-            var auth0ClientId = configuration["Auth0:ClientId"];
+            var auth0ClientId = configuration["Auth0:Api:ClientId"];
 
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
@@ -92,7 +94,7 @@ public static class ServiceCollectionsExtensions
         .AddJwtBearer(options =>
         {
             options.Authority = configuration["Auth0:Domain"];
-            options.Audience = configuration["Auth0:Audience"];
+            options.Audience = configuration["Auth0:Api:Audience"];
         });
         services.AddHttpContextAccessor();
     }

@@ -23,39 +23,45 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
     {
         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-        int statusCode;
         string message;
 
         switch (exception)
         {
             case BusinessException:
-                statusCode = StatusCodes.Status400BadRequest;
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 message = exception.Message;
                 break;
             case NotFoundException:
-                statusCode = StatusCodes.Status404NotFound;
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
                 message = exception.Message;
                 break;
             case ConflictException:
-                statusCode = StatusCodes.Status409Conflict;
+                context.Response.StatusCode = StatusCodes.Status409Conflict;
                 message = exception.Message;
                 break;
             case ClaimNotFoundException:
-                statusCode = StatusCodes.Status401Unauthorized;
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 message = exception.Message;
                 break;
             case FormatException:
-                statusCode = StatusCodes.Status500InternalServerError;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 message = exception.Message;
                 break;
+            case SettingsException:
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                message = exception.Message;
+                break;
+            case HttpRequestException:
+                message = exception.Message;
+                context.Response.StatusCode = context.Response.StatusCode == StatusCodes.Status200OK ?
+                    StatusCodes.Status503ServiceUnavailable :
+                    context.Response.StatusCode;
+                break;
             default:
-                _logger.LogError(exception, "Ocorreu um erro inesperado.");
-                statusCode = StatusCodes.Status500InternalServerError;
+                _logger.LogError(exception, Message.ErroInesperado);
                 message = Message.ErroInesperado;
                 break;
         }
-
-        context.Response.StatusCode = statusCode;
 
         return context.Response.WriteAsJsonAsync(ApiResponseDto<string>.FailureResponse(message));
     }

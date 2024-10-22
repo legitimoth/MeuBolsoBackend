@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuBolsoBackend;
 [Route("api/usuarios")]
 [ApiController]
+[Authorize]
 public class UsuarioController(IUsuarioService service) : ControllerBase
 {
 
