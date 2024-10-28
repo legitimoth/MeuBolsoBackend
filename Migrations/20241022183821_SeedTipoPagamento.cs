@@ -19,6 +19,7 @@ namespace MeuBolsoBackend
                     { 1, "Pix" },
                     { 2, "Cartao" },
                     { 3, "Dinheiro" },
+                    { 4, "Boleto" },
                 });
         }
 
@@ -28,7 +29,7 @@ namespace MeuBolsoBackend
             migrationBuilder.DeleteData(
                             table: "TiposPagamento",
                             keyColumn: "Id",
-                            keyValues: [1, 2, 3]);
+                            keyValues: [1, 2, 3, 4]);
         }
     }
 }
