@@ -32,6 +32,9 @@ public class PagamentoConfiguration : IEntityTypeConfiguration<PagamentoEntity>
         builder.Property(p => p.Local)
             .HasMaxLength(50); // Opcional: definir um tamanho máximo
 
+        builder.Property(p => p.DataHora)
+            .IsRequired();
+
         builder.Property(p => p.Parcelas);
 
         // Configurando a propriedade Cancelado com valor padrão
