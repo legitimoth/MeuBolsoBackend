@@ -7,27 +7,25 @@ namespace MeuBolsoBackend;
 [Authorize]
 public class CartaoController(ICartaoService cartaoService) : ControllerBase
 {
-    private readonly ICartaoService _cartaoService = cartaoService;
-
     [HttpPost]
     public async Task<ActionResult<CartaoDto>> AdicionarAsync([FromBody] CartaoManterDto cartaoManterDto)
     {
-        var cartaoDto = await _cartaoService.AdicionarAsync(cartaoManterDto);
+        var cartaoDto = await cartaoService.AdicionarAsync(cartaoManterDto);
         return CreatedAtAction(nameof(RecuperarPorIdAsync), cartaoDto);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:long}")]
     public async Task<IActionResult> Atualizar(long id, [FromBody] CartaoManterDto cartaoManterDto)
     {
-        await _cartaoService.AtualizarAsync(id, cartaoManterDto);
+        await cartaoService.AtualizarAsync(id, cartaoManterDto);
 
         return NoContent();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<ActionResult<CartaoDto>> RecuperarPorIdAsync(long id)
     {
-        var cartaoDto = await _cartaoService.RecuperarPorIdAsync(id);
+        var cartaoDto = await cartaoService.RecuperarPorIdAsync(id);
 
         return Ok(cartaoDto);
     }
@@ -35,15 +33,15 @@ public class CartaoController(ICartaoService cartaoService) : ControllerBase
     [HttpGet("usuarios")]
     public async Task<ActionResult<CartaoDto>> RecuperarTodosPorUsuarioIdAsync()
     {
-        var cartaoDto = await _cartaoService.RecuperarTodosPorUsuarioIdAsync();
+        var cartaoDto = await cartaoService.RecuperarTodosPorUsuarioIdAsync();
 
         return Ok(cartaoDto);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}")]
     public async Task<IActionResult> RemoverPorIdAsync(long id)
     {
-        await _cartaoService.RemoverPorIdAsync(id);
+        await cartaoService.RemoverPorIdAsync(id);
 
         return NoContent();
     }

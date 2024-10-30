@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MeuBolsoBackend;
 
-public class ModelValidationFilter : IActionFilter
+public abstract class ModelValidationFilter : IActionFilter
 {
     public void OnActionExecuting(ActionExecutingContext context)
     {

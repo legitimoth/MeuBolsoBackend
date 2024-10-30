@@ -6,7 +6,7 @@ public class TagMapper : Profile
 {
     public TagMapper()
     {
-        CreateMap<TagEntity, TagDto>();
+        CreateMap<TagEntity, TagDto>().ReverseMap();
         CreateMap<TagManterDto, TagEntity>()
         .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom((src, dest, _, context) =>
             {

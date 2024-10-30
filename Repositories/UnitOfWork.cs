@@ -4,15 +4,13 @@ namespace MeuBolsoBackend;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    private readonly AppDbContext _context = context;
-
     public async Task SaveAsync()
     {
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        return await _context.Database.BeginTransactionAsync();
+        return await context.Database.BeginTransactionAsync();
     }
 }

@@ -5,22 +5,17 @@ namespace MeuBolsoBackend;
 
 public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnitOfWork unitOfWork, IAuthService authService) : IUsuarioService
 {
-    private readonly IUsuarioRepository _repository = repository;
-    private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IAuthService _authService = authService;
-
     public async Task<UsuarioDto> RecuperarPorIdAsync(long id)
     {
-        var usuario = await _repository.RecuperarPorIdAsync(id) ?? throw new NotFoundException(Message.UsuarioNaoEncontrado);
+        var usuario = await repository.RecuperarPorIdAsync(id, false);
 
-        return _mapper.Map<UsuarioDto>(usuario);
+        return mapper.Map<UsuarioDto>(usuario);
     }
 
     public async Task<UsuarioDto> AdicionarAsync()
     {
-        var email = _authService.RecuperarEmail();
-        var usuario = await _repository.RecuperarPorEmailAsync(email);
+        var email = authService.RecuperarEmail();
+        var usuario = await repository.RecuperarPorEmailAsync(email);
 
         if (usuario != null)
         {
@@ -29,18 +24,18 @@ public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnit
 
         usuario = new UsuarioEntity()
         {
-            Nome = _authService.RecuperarNome(),
-            Sobrenome = _authService.RecuperarSobrenome(),
+            Nome = authService.RecuperarNome(),
+            Sobrenome = authService.RecuperarSobrenome(),
             Email = email
         };
 
-        using (var transaction = await _unitOfWork.BeginTransactionAsync())
+        using (var transaction = await unitOfWork.BeginTransactionAsync())
         {
             try
             {
-                await _repository.AdicionarAsync(usuario);
-                await _unitOfWork.SaveAsync();
-                await _authService.RegistrarUsuario(usuario.Id);
+                await repository.AdicionarAsync(usuario);
+                await unitOfWork.SaveAsync();
+                await authService.RegistrarUsuario(usuario.Id);
                 await transaction.CommitAsync();
             }
             catch(Exception ex)
@@ -50,6 +45,6 @@ public class UsuarioService(IUsuarioRepository repository, IMapper mapper, IUnit
             }
         }
 
-        return _mapper.Map<UsuarioDto>(usuario);
+        return mapper.Map<UsuarioDto>(usuario);
     }
 }
