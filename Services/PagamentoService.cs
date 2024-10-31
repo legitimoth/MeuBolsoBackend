@@ -21,7 +21,7 @@ public class PagamentoService(
         return mapper.Map<PagamentoDto>(pagamentoEntity);
     }
 
-    public void Atualizar(PagamentoManterDto PagamentoManterDto)
+    public void Atualizar(PagamentoManterDto pagamentoManterDto)
     {
         throw new NotImplementedException();
     }
