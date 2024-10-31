@@ -34,6 +34,9 @@ public static class Message
     public const string IdMaiorQueZero = "O ID deve ser maior que zero.";
     public const string UrlInvalida = "{0} não é uma URL válida.";
     public const string RegistroDuplicado = "{0} já cadastrado.";
+    public const string ValorMinimo = "O {0} deve ser maior que {1}.";
+    public const string ValorMaximo = "O {0} deve ser menor que {1}.";
+    public const string CampoInvalido = "O campo {0} não é valido.";
     #endregion
 
     #region Erro
