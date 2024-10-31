@@ -68,4 +68,23 @@ public class TagService(IMapper mapper, ITagRepository repository, IUsuarioRepos
         await repository.RemoverPorIdAsync(id);
         await unitOfWork.SaveAsync();
     }
+    
+    public async Task<List<TagEntity>> ProcessarAsync(List<TagEntity> tagsEntity)
+    {
+        // Filtra IDs existentes e busca no banco de dados em uma única consulta
+        var idsExistentes = tagsEntity.Where(t => t.Id != 0).Select(t => t.Id).ToList();
+        var tagsExistentes = await repository.RecuperarPorIdAsync(idsExistentes);
+
+        // Obtém as novas tags (Id == 0)
+        var novasTags = tagsEntity.Where(t => t.Id == 0).ToList();
+
+        // Adiciona as novas tags ao contexto
+        if (novasTags.Any())
+        {
+            await repository.AdicionarAsync(novasTags);
+        }
+
+        // Retorna todas as tags combinadas, tanto existentes quanto novas
+        return tagsExistentes.Concat(novasTags).ToList();
+    }
 }

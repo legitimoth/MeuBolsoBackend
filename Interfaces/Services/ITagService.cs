@@ -7,4 +7,5 @@ public interface ITagService
     Task<List<TagDto>> RecuperarTodasPorUsuarioIdAsync(long usuarioId);
     Task<TagDto> RecuperarPorIdAsync(long id);
     Task RemoverPorIdAsync(long id);
+    Task<List<TagEntity>> ProcessarAsync(List<TagEntity> tagsEntity);
 }

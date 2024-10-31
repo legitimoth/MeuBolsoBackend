@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MeuBolsoBackend;
 
-public abstract class ApiResponseFilter : IAsyncResultFilter
+public class ApiResponseFilter : IAsyncResultFilter
 {
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {

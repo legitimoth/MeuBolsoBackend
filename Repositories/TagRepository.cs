@@ -10,6 +10,13 @@ public class TagRepository(AppDbContext context) : ITagRepository
 
         return tagEntity;
     }
+    
+    public async Task<List<TagEntity>> AdicionarAsync(List<TagEntity> tagsEntity)
+    {
+        await context.Tags.AddRangeAsync(tagsEntity);
+
+        return tagsEntity;
+    }
 
     public void Atualizar(TagEntity tagEntity)
     {
@@ -25,6 +32,11 @@ public class TagRepository(AppDbContext context) : ITagRepository
     public async Task<TagEntity?> RecuperarPorIdAsync(long id)
     {
         return await context.Tags.FirstOrDefaultAsync(t => t.Id == id);
+    }
+    
+    public async Task<List<TagEntity>> RecuperarPorIdAsync(List<long> ids)
+    {
+        return await context.Tags.Where(t => ids.Contains(t.Id)).ToListAsync();
     }
 
     public async Task<bool> ExistePorNomeEUsuarioIdAsync(string nome, long usuarioId)

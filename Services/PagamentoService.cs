@@ -2,17 +2,23 @@ using AutoMapper;
 
 namespace MeuBolsoBackend;
 
-public class PagamentoService(IPagamentoRepository repository, IMapper mapper, IUnitOfWork unitOfWork, IAuthService authService) : IPagamentoService
+public class PagamentoService(
+    IPagamentoRepository repository, 
+    IMapper mapper, 
+    IUnitOfWork unitOfWork, 
+    IAuthService authService,
+    ITagService tagService) : IPagamentoService
 {
 
     public async Task<PagamentoDto> AdicionarAsync(PagamentoManterDto pagamentoManterDto)
     {
-        var entity = mapper.Map<PagamentoEntity>(pagamentoManterDto);
-        VincularUsuario(entity);
-        await repository.AdicionarAsync(entity);
+        var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoManterDto);
+        VincularUsuario(pagamentoEntity);
+        pagamentoEntity.Tags = await tagService.ProcessarAsync(pagamentoEntity.Tags);
+        await repository.AdicionarAsync(pagamentoEntity);
         await unitOfWork.SaveAsync();
         
-        return mapper.Map<PagamentoDto>(entity);
+        return mapper.Map<PagamentoDto>(pagamentoEntity);
     }
 
     public void Atualizar(PagamentoManterDto PagamentoManterDto)
