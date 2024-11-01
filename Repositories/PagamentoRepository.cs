@@ -11,9 +11,9 @@ public class PagamentoRepository(AppDbContext context)  : IPagamentoRepository
         return pagamentoEntity;
     }
 
-    public void Atualizar(PagamentoEntity PagamentoEntity)
+    public void Atualizar(PagamentoEntity pagamentoEntity)
     {
-        context.Pagamentos.Update(PagamentoEntity);
+        context.Pagamentos.Update(pagamentoEntity);
     }
 
     public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id, bool incluirTags)

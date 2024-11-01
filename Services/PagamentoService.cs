@@ -51,9 +51,15 @@ public class PagamentoService(
 
     }
 
-    public Task Cancelar(long id)
+    public async Task CancelarAsync(long id)
     {
-        throw new NotImplementedException();
+        var pagamentoEntity = await repository.RecuperarPorIdAsync(id) 
+                              ?? throw new NotFoundException(Message.PagamentoNaoEncontrado);
+        
+        pagamentoEntity.Cancelado = !pagamentoEntity.Cancelado;
+        
+        repository.Atualizar(pagamentoEntity);
+        await unitOfWork.SaveAsync();
     }
 
     private void VincularUsuario(PagamentoEntity entity)

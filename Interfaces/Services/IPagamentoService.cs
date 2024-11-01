@@ -7,5 +7,5 @@ public interface IPagamentoService
     Task<PagamentoDto?> RecuperarPorIdAsync(long id);
     Task RemoverPorIdAsync(long id);
     Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync();
-    Task Cancelar(long id);
+    Task CancelarAsync(long id);
 }

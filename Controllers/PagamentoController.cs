@@ -34,4 +34,12 @@ public class PagamentoController(IPagamentoService service) : ControllerBase
     {
         return Ok(await service.RecuperarPorUsuarioIdAsync());
     }
+    
+    [HttpPatch("{id:long}/cancelar")]
+    public async Task<IActionResult> CancelarAsync(long id)
+    {
+        await service.CancelarAsync(id);
+        
+        return Ok();
+    }
 }
