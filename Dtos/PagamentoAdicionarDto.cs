@@ -1,6 +1,6 @@
 namespace MeuBolsoBackend;
 
-public record PagamentoManterDto
+public record PagamentoAdicionarDto
 {
     public required string Nome { get; set; }
     public string? Descricao { get; set; }

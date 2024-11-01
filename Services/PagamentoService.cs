@@ -10,9 +10,9 @@ public class PagamentoService(
     ITagService tagService) : IPagamentoService
 {
 
-    public async Task<PagamentoDto> AdicionarAsync(PagamentoManterDto pagamentoManterDto)
+    public async Task<PagamentoDto> AdicionarAsync(PagamentoAdicionarDto pagamentoAdicionarDto)
     {
-        var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoManterDto);
+        var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoAdicionarDto);
         VincularUsuario(pagamentoEntity);
         pagamentoEntity.Tags = await tagService.ProcessarAsync(pagamentoEntity.Tags);
         await repository.AdicionarAsync(pagamentoEntity);
@@ -21,14 +21,18 @@ public class PagamentoService(
         return mapper.Map<PagamentoDto>(pagamentoEntity);
     }
 
-    public void Atualizar(PagamentoManterDto pagamentoManterDto)
+    public async Task AtualizarAsync(long id, PagamentoAtualizarDto pagamentoAtualizarDto)
     {
-        throw new NotImplementedException();
+        var pagamentoEntity = await repository.RecuperarPorIdAsync(id) ?? 
+                        throw new NotFoundException(Message.PagamentoNaoEncontrado);
+        mapper.Map(pagamentoAtualizarDto, pagamentoEntity);
+
+        await unitOfWork.SaveAsync();
     }
 
     public async Task<PagamentoDto?> RecuperarPorIdAsync(long id)
     {
-        var entity = await repository.RecuperarPorIdAsync(id);
+        var entity = await repository.RecuperarPorIdAsync(id, true);
         
         return mapper.Map<PagamentoDto>(entity);
     }
@@ -38,9 +42,13 @@ public class PagamentoService(
         throw new NotImplementedException();
     }
 
-    public Task<List<PagamentoDto>> RecuperarTodosPorUsuarioIdAsync(long usuarioId)
+    public async Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync()
     {
-        throw new NotImplementedException();
+        var usuarioId = authService.RecuperarId();
+        var pagamentos = await repository.RecuperarTodosPorUsuarioIdAsync(usuarioId);
+        
+        return mapper.Map<List<PagamentoDto>>(pagamentos);
+
     }
 
     public Task Cancelar(long id)

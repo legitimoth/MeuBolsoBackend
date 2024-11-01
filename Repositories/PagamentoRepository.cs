@@ -16,16 +16,23 @@ public class PagamentoRepository(AppDbContext context)  : IPagamentoRepository
         context.Pagamentos.Update(PagamentoEntity);
     }
 
-    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id)
+    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id, bool incluirTags)
     {
-        return await context.Pagamentos
-            .Include(p => p.Tags)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var query = context.Pagamentos.AsQueryable();
+        query.Include(p => p.Tags).Include(p => p.TipoPagamento);
+        
+        if (incluirTags)
+        {
+            query = query.Include(p => p.Tags);
+        }
+
+        return await query.FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<List<PagamentoEntity>> RecuperarTodosPorUsuarioIdAsync(long usuarioId)
     {
         return await context.Pagamentos
+            .Include(p => p.TipoPagamento)
             .Include(p => p.Tags)
             .Where(p => p.UsuarioId == usuarioId)
             .ToListAsync();

@@ -20,6 +20,10 @@ public static class Message
     public const string CartaoFinalInvalido = "O campo Final deve conter exatamente 4 dígitos numéricos.";
     public const string CartaoDuplicado = "O cartão que você está tentando adicionar já existe.";
     #endregion
+    
+    #region Pagamento
+    public const string PagamentoNaoEncontrado = "Pagamento não foi encontrado.";
+    #endregion
 
     #region Auth0
     public const string Auth0NaoConfigurado = "{0} do Auth0 não foi configurado.";
