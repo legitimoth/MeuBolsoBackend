@@ -16,10 +16,10 @@ public class PagamentoRepository(AppDbContext context)  : IPagamentoRepository
         context.Pagamentos.Update(pagamentoEntity);
     }
 
-    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id, bool incluirTags)
+    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id, bool incluirTags = false)
     {
         var query = context.Pagamentos.AsQueryable();
-        query.Include(p => p.Tags).Include(p => p.TipoPagamento);
+        query.Include(p => p.TipoPagamento);
         
         if (incluirTags)
         {

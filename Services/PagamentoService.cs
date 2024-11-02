@@ -37,9 +37,10 @@ public class PagamentoService(
         return mapper.Map<PagamentoDto>(entity);
     }
 
-    public Task RemoverPorIdAsync(long id)
+    public async Task RemoverPorIdAsync(long id)
     {
-        throw new NotImplementedException();
+        await repository.RemoverPorIdAsync(id);
+        await unitOfWork.SaveAsync();
     }
 
     public async Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync()
@@ -48,7 +49,6 @@ public class PagamentoService(
         var pagamentos = await repository.RecuperarTodosPorUsuarioIdAsync(usuarioId);
         
         return mapper.Map<List<PagamentoDto>>(pagamentos);
-
     }
 
     public async Task CancelarAsync(long id)

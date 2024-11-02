@@ -42,4 +42,11 @@ public class PagamentoController(IPagamentoService service) : ControllerBase
         
         return Ok();
     }
+    
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> RemoverAsync(long id)
+    {
+        await service.RemoverPorIdAsync(id);
+        return NoContent();
+    }
 }
