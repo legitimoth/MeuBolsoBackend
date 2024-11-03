@@ -9,17 +9,17 @@ namespace MeuBolsoBackend;
 public class PagamentoController(IPagamentoService service, IAuthService authService) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<TagDto>> AdicionarAsync([FromBody] PagamentoAdicionarDto pagamentoAdicionarDto)
+    public async Task<ActionResult<TagDto>> AdicionarAsync([FromBody] PagamentoManterDto pagamentoManterDto)
     {
-        var tagDto = await service.AdicionarAsync(pagamentoAdicionarDto);
+        var tagDto = await service.AdicionarAsync(pagamentoManterDto);
 
         return CreatedAtAction(nameof(RecuperarPorIdAsync), tagDto);
     }
     
     [HttpPut("{id:long}")]
-    public async Task<ActionResult> AtualizarAsync(long id, [FromBody] PagamentoAtualizarDto pagamentoAtualizarDto)
+    public async Task<ActionResult> AtualizarAsync(long id, [FromBody] PagamentoManterDto pagamentoManterDto)
     {
-        await service.AtualizarAsync(id, pagamentoAtualizarDto);
+        await service.AtualizarAsync(id, pagamentoManterDto);
         return NoContent();
     }
     

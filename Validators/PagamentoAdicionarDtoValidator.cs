@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace MeuBolsoBackend;
 
-public class PagamentoAdicionarDtoValidator : AbstractValidator<PagamentoAdicionarDto>
+public class PagamentoAdicionarDtoValidator : AbstractValidator<PagamentoManterDto>
 {
     public PagamentoAdicionarDtoValidator()
     {

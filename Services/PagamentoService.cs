@@ -6,26 +6,26 @@ public class PagamentoService(
     IPagamentoRepository repository, 
     IMapper mapper, 
     IUnitOfWork unitOfWork, 
-    IAuthService authService,
-    ITagService tagService) : IPagamentoService
+    IAuthService authService
+    ) : IPagamentoService
 {
 
-    public async Task<PagamentoDto> AdicionarAsync(PagamentoAdicionarDto pagamentoAdicionarDto)
+    public async Task<PagamentoDto> AdicionarAsync(PagamentoManterDto pagamentoManterDto)
     {
-        var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoAdicionarDto);
-        VincularUsuario(pagamentoEntity);
-        pagamentoEntity.Tags = await tagService.ProcessarAsync(pagamentoEntity.Tags);
+        var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoManterDto);
+        pagamentoEntity.UsuarioId = authService.RecuperarId();
+        
         await repository.AdicionarAsync(pagamentoEntity);
         await unitOfWork.SaveAsync();
         
         return mapper.Map<PagamentoDto>(pagamentoEntity);
     }
 
-    public async Task AtualizarAsync(long id, PagamentoAtualizarDto pagamentoAtualizarDto)
+    public async Task AtualizarAsync(long id, PagamentoManterDto pagamentoManterDto)
     {
         var pagamentoEntity = await repository.RecuperarPorIdAsync(id) ?? 
                         throw new NotFoundException(Message.PagamentoNaoEncontrado);
-        mapper.Map(pagamentoAtualizarDto, pagamentoEntity);
+        mapper.Map(pagamentoManterDto, pagamentoEntity);
 
         await unitOfWork.SaveAsync();
     }
@@ -59,15 +59,5 @@ public class PagamentoService(
         
         repository.Atualizar(pagamentoEntity);
         await unitOfWork.SaveAsync();
-    }
-
-    private void VincularUsuario(PagamentoEntity entity)
-    {
-        entity.UsuarioId = authService.RecuperarId();
-        
-        foreach (var tag in entity.Tags)
-        {
-            tag.UsuarioId = entity.UsuarioId;
-        }
     }
 }
