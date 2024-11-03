@@ -6,6 +6,6 @@ public interface IPagamentoService
     Task AtualizarAsync(long id, PagamentoAtualizarDto pagamentoAtualizarDto);
     Task<PagamentoDto?> RecuperarPorIdAsync(long id);
     Task RemoverPorIdAsync(long id);
-    Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync();
+    Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync(long usuarioId);
     Task CancelarAsync(long id);
 }

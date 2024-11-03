@@ -6,10 +6,10 @@ namespace MeuBolsoBackend;
 [ApiController]
 [Route("api/pagamentos")]
 [Authorize]
-public class PagamentoController(IPagamentoService service) : ControllerBase
+public class PagamentoController(IPagamentoService service, IAuthService authService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AdicionarAsync([FromBody] PagamentoAdicionarDto pagamentoAdicionarDto)
+    public async Task<ActionResult<TagDto>> AdicionarAsync([FromBody] PagamentoAdicionarDto pagamentoAdicionarDto)
     {
         var tagDto = await service.AdicionarAsync(pagamentoAdicionarDto);
 
@@ -17,26 +17,26 @@ public class PagamentoController(IPagamentoService service) : ControllerBase
     }
     
     [HttpPut("{id:long}")]
-    public async Task<IActionResult> AtualizarAsync(long id, [FromBody] PagamentoAtualizarDto pagamentoAtualizarDto)
+    public async Task<ActionResult> AtualizarAsync(long id, [FromBody] PagamentoAtualizarDto pagamentoAtualizarDto)
     {
         await service.AtualizarAsync(id, pagamentoAtualizarDto);
         return NoContent();
     }
     
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> RecuperarPorIdAsync(long id)
+    public async Task<ActionResult<TagDto>> RecuperarPorIdAsync(long id)
     {
         return Ok(await service.RecuperarPorIdAsync(id));
     }
     
     [HttpGet]
-    public async Task<IActionResult> RecuperarPorUsuarioIdAsync()
+    public async Task<ActionResult<TagDto>> RecuperarTodosAsync()
     {
-        return Ok(await service.RecuperarPorUsuarioIdAsync());
+        return Ok(await service.RecuperarPorUsuarioIdAsync(authService.RecuperarId()));
     }
     
     [HttpPatch("{id:long}/cancelar")]
-    public async Task<IActionResult> CancelarAsync(long id)
+    public async Task<ActionResult> CancelarAsync(long id)
     {
         await service.CancelarAsync(id);
         
@@ -44,7 +44,7 @@ public class PagamentoController(IPagamentoService service) : ControllerBase
     }
     
     [HttpDelete("{id:long}")]
-    public async Task<IActionResult> RemoverAsync(long id)
+    public async Task<ActionResult> RemoverAsync(long id)
     {
         await service.RemoverPorIdAsync(id);
         return NoContent();

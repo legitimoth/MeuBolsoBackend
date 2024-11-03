@@ -43,9 +43,8 @@ public class PagamentoService(
         await unitOfWork.SaveAsync();
     }
 
-    public async Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync()
+    public async Task<List<PagamentoDto>> RecuperarPorUsuarioIdAsync(long usuarioId)
     {
-        var usuarioId = authService.RecuperarId();
         var pagamentos = await repository.RecuperarTodosPorUsuarioIdAsync(usuarioId);
         
         return mapper.Map<List<PagamentoDto>>(pagamentos);

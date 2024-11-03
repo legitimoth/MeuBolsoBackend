@@ -15,7 +15,7 @@ public class CartaoController(ICartaoService cartaoService) : ControllerBase
     }
 
     [HttpPut("{id:long}")]
-    public async Task<IActionResult> Atualizar(long id, [FromBody] CartaoManterDto cartaoManterDto)
+    public async Task<ActionResult> Atualizar(long id, [FromBody] CartaoManterDto cartaoManterDto)
     {
         await cartaoService.AtualizarAsync(id, cartaoManterDto);
 
@@ -39,7 +39,7 @@ public class CartaoController(ICartaoService cartaoService) : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
-    public async Task<IActionResult> RemoverPorIdAsync(long id)
+    public async Task<ActionResult> RemoverPorIdAsync(long id)
     {
         await cartaoService.RemoverPorIdAsync(id);
 
