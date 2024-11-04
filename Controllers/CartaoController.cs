@@ -30,7 +30,7 @@ public class CartaoController(ICartaoService cartaoService) : ControllerBase
         return Ok(cartaoDto);
     }
 
-    [HttpGet("usuarios")]
+    [HttpGet]
     public async Task<ActionResult<CartaoDto>> RecuperarTodosAsync()
     {
         var cartaoDto = await cartaoService.RecuperarTodosAsync();
