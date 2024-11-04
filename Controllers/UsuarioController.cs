@@ -7,19 +7,16 @@ namespace MeuBolsoBackend;
 [Authorize]
 public class UsuarioController(IUsuarioService service) : ControllerBase
 {
-
-    private readonly IUsuarioService _service = service;
-
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<ActionResult<UsuarioDto>> RecuperarPorIdAsync(long id)
     {
-        return Ok(await _service.RecuperarPorIdAsync(id));
+        return Ok(await service.RecuperarPorIdAsync(id));
     }
 
     [HttpPost]
     public async Task<ActionResult<UsuarioDto>> AdicionarAsync()
     {
-        var usuario = await _service.AdicionarAsync();
+        var usuario = await service.AdicionarAsync();
 
         return CreatedAtAction(nameof(RecuperarPorIdAsync), usuario);
     }

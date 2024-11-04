@@ -17,8 +17,17 @@ public static class Message
     #endregion
 
     #region Cartao
+
+    public const string CartaoNaoEncontrado = "O cartão não foi encontrado.";
     public const string CartaoFinalInvalido = "O campo Final deve conter exatamente 4 dígitos numéricos.";
     public const string CartaoDuplicado = "O cartão que você está tentando adicionar já existe.";
+    public const string CartaoObrigatorio = "O cartão deve ser informado.";
+
+    public const string CartaoDesnecessario = "O cartão só deve ser preenchido para o tipo de pagamento 'Cartão'.";
+    #endregion
+    
+    #region Pagamento
+    public const string PagamentoNaoEncontrado = "Pagamento não foi encontrado.";
     #endregion
 
     #region Auth0
@@ -34,6 +43,9 @@ public static class Message
     public const string IdMaiorQueZero = "O ID deve ser maior que zero.";
     public const string UrlInvalida = "{0} não é uma URL válida.";
     public const string RegistroDuplicado = "{0} já cadastrado.";
+    public const string ValorMinimo = "{0} deve ser maior que {1}.";
+    public const string ValorMaximo = "{0} deve ser menor que {1}.";
+    public const string CampoInvalido = "{0} não possui um valor valido.";
     #endregion
 
     #region Erro

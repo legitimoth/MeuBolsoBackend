@@ -2,11 +2,9 @@ namespace MeuBolsoBackend;
 
 public class AuthenticationMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next = next;
-
     public async Task InvokeAsync(HttpContext httpContext)
     {
-        await _next(httpContext);
+        await next(httpContext);
 
         if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
         {

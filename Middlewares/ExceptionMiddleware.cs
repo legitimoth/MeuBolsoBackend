@@ -4,14 +4,11 @@ namespace MeuBolsoBackend;
 
 public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
 {
-    private readonly RequestDelegate _next = next;
-    private readonly ILogger<ExceptionMiddleware> _logger = logger;
-
     public async Task InvokeAsync(HttpContext httpContext)
     {
         try
         {
-            await _next(httpContext);
+            await next(httpContext);
         }
         catch (Exception ex)
         {
@@ -58,7 +55,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
                     context.Response.StatusCode;
                 break;
             default:
-                _logger.LogError(exception, Message.ErroInesperado);
+                logger.LogError(exception, Message.ErroInesperado);
                 message = Message.ErroInesperado;
                 break;
         }

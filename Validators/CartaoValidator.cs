@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace MeuBolsoBackend;
 
-public class CartaoManterDtoValidator : AbstractValidator<CartaoManterDto>
+public class CartaoValidator : AbstractValidator<CartaoManterDto>
 {
-    public CartaoManterDtoValidator()
+    public CartaoValidator()
     {
         RuleFor(x => x.Nome)
             .NotEmpty().WithMessage(Message.CampoObrigatorio.Bind("Nome"))

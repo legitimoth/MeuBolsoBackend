@@ -7,7 +7,7 @@ public class ApiResponseFilter : IAsyncResultFilter
 {
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
-        if (context.Result is ObjectResult objectResult && objectResult.Value is not ApiResponseDto<object>)
+        if (context.Result is ObjectResult objectResult && !IsApiResponseDto(objectResult.Value))
         {
             var apiResponse = new ApiResponseDto<object>(objectResult.Value, true);
 
@@ -18,5 +18,12 @@ public class ApiResponseFilter : IAsyncResultFilter
         }
 
         await next();
+    }
+    
+    private bool IsApiResponseDto(object? value)
+    {
+        if (value == null) return false;
+        var type = value.GetType();
+        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ApiResponseDto<>);
     }
 }

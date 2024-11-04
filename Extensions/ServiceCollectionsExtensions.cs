@@ -1,3 +1,5 @@
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -19,7 +21,8 @@ public static class ServiceCollectionsExtensions
         // Outros serviços
         services.RegisterServices();
         services.RegisterRepositories();
-        services.AddAutoMapper(typeof(Program));
+        services.AddAutoMapperWithCollectionMappers();
+        //services.AddAutoMapper(typeof(Program));
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(typeof(Program).Assembly);
         services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
