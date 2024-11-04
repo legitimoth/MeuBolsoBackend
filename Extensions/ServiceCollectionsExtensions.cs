@@ -1,12 +1,10 @@
 using AutoMapper;
-using AutoMapper.EquivalencyExpression;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MeuBolsoBackend;
 
@@ -21,8 +19,7 @@ public static class ServiceCollectionsExtensions
         // Outros serviços
         services.RegisterServices();
         services.RegisterRepositories();
-        services.AddAutoMapperWithCollectionMappers();
-        //services.AddAutoMapper(typeof(Program));
+        services.AddAutoMapper(typeof(Program));
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(typeof(Program).Assembly);
         services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));

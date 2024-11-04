@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /app
 
 # Copia o arquivo de solução e o .csproj do projeto
-COPY MeuBolso.sln ./
-COPY ./Api/*.csproj ./Api/
+COPY MeuBolsoBackend.sln ./
+COPY ./*.csproj ./
 
 # Restaura as dependências
 RUN dotnet restore
@@ -24,4 +24,4 @@ COPY --from=build-env /app/out .
 EXPOSE 8080
 
 # Rodar a aplicação
-ENTRYPOINT ["dotnet", "MeuBolso.Api.dll"]
+ENTRYPOINT ["dotnet", "MeuBolsoBackend.dll"]
