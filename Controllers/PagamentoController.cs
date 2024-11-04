@@ -6,7 +6,7 @@ namespace MeuBolsoBackend;
 [ApiController]
 [Route("api/pagamentos")]
 [Authorize]
-public class PagamentoController(IPagamentoService service, IAuthService authService) : ControllerBase
+public class PagamentoController(IPagamentoService service) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<TagDto>> AdicionarAsync([FromBody] PagamentoManterDto pagamentoManterDto)
@@ -32,7 +32,7 @@ public class PagamentoController(IPagamentoService service, IAuthService authSer
     [HttpGet]
     public async Task<ActionResult<TagDto>> RecuperarTodosAsync()
     {
-        return Ok(await service.RecuperarPorUsuarioIdAsync(authService.RecuperarId()));
+        return Ok(await service.RecuperarTodosAsync());
     }
     
     [HttpPatch("{id:long}/cancelar")]

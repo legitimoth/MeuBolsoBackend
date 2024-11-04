@@ -2,49 +2,50 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeuBolsoBackend;
 
-public class PagamentoRepository(AppDbContext context)  : IPagamentoRepository
+public class PagamentoRepository : IPagamentoRepository
 {
+    private readonly DbSet<PagamentoEntity> _context;
+    private readonly long _usuarioId;
+
+    public PagamentoRepository(AppDbContext context, IAuthService authService)
+    {
+        _context = context.Pagamentos;
+        _usuarioId = authService.RecuperarId();
+    }
+
     public async Task<PagamentoEntity> AdicionarAsync(PagamentoEntity pagamentoEntity)
     {
-        await context.Pagamentos.AddAsync(pagamentoEntity);
+        pagamentoEntity.UsuarioId = _usuarioId;
+
+        await _context.AddAsync(pagamentoEntity);
 
         return pagamentoEntity;
     }
 
     public void Atualizar(PagamentoEntity pagamentoEntity)
     {
-        context.Pagamentos.Update(pagamentoEntity);
+        _context.Update(pagamentoEntity);
     }
 
-    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id, bool incluirTags = false)
+    public async Task<PagamentoEntity?> RecuperarPorIdAsync(long id)
     {
-        var query = context.Pagamentos.AsQueryable();
-        query.Include(p => p.TipoPagamento);
-        
-        if (incluirTags)
-        {
-            query = query.Include(p => p.Tags);
-        }
-
-        return await query.FirstOrDefaultAsync(p => p.Id == id);
-    }
-
-    public async Task<List<PagamentoEntity>> RecuperarTodosPorUsuarioIdAsync(long usuarioId)
-    {
-        return await context.Pagamentos
-            .Include(p => p.TipoPagamento)
+        return await _context
             .Include(p => p.Tags)
-            .Where(p => p.UsuarioId == usuarioId)
+            .Include(p => p.TipoPagamento)
+            .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == _usuarioId);
+    }
+
+    public async Task<List<PagamentoEntity>> RecuperarTodosAsync()
+    {
+        return await _context
+            .Where(p => p.UsuarioId == _usuarioId)
+            .Include(p => p.Tags)
+            .Include(p => p.TipoPagamento)
             .ToListAsync();
     }
 
-    public async Task RemoverPorIdAsync(long id)
+    public void Remover(PagamentoEntity pagamentoEntity)
     {
-        var pagamento = await context.Pagamentos.FindAsync(id);
-
-        if(pagamento != null)
-        {
-            context.Pagamentos.Remove(pagamento);
-        }
+        _context.Remove(pagamentoEntity);
     }
 }

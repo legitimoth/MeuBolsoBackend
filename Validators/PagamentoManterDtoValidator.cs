@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace MeuBolsoBackend;
 
-public class PagamentoAdicionarDtoValidator : AbstractValidator<PagamentoManterDto>
+public class PagamentoManterDtoValidator : AbstractValidator<PagamentoManterDto>
 {
-    public PagamentoAdicionarDtoValidator()
+    public PagamentoManterDtoValidator()
     {
         RuleFor(x => x.Nome)
             .NotEmpty().WithMessage(Message.CampoObrigatorio.Bind("Nome"))

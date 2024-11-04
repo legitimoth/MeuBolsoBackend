@@ -7,6 +7,7 @@ public class PagamentoMapper : Profile
     public PagamentoMapper()
     {
         CreateMap<PagamentoEntity, PagamentoDto>();
-        CreateMap<PagamentoManterDto, PagamentoEntity>();
+        CreateMap<PagamentoManterDto, PagamentoEntity>()
+            .ForMember(dest => dest.Tags, opt => opt.Ignore());
     }
 }

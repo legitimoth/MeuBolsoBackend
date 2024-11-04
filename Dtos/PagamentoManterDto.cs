@@ -7,6 +7,7 @@ public record PagamentoManterDto
     public string? Local { get; set; }
     public DateTimeOffset DataHora { get; set; }
     public required decimal Valor { get; set; }
-    public int? Parcelas { get; set;}
+    public int? Parcelas { get; set; } = null;
     public TipoPagamentoEnum TipoPagamentoId { get; set; }
+    public List<TagDto> Tags { get; set; } = [];
 }

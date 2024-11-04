@@ -11,14 +11,32 @@ public class TagConfiguration : IEntityTypeConfiguration<TagEntity>
 
         builder.Property(t => t.Nome)
             .IsRequired()
-            .HasMaxLength(50);
-
-        builder.Property(t => t.Cor)
-            .HasMaxLength(7);
+            .HasMaxLength(10);
 
         builder.HasOne<UsuarioEntity>()
             .WithMany()
             .HasForeignKey(t => t.UsuarioId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // Define o relacionamento muitos-para-muitos com PagamentoEntity
+        builder.HasMany(t => t.Pagamentos)
+            .WithMany(p => p.Tags)
+            .UsingEntity<Dictionary<string, object>>(
+                "PagamentoTag", // Nome da tabela de junção
+                j => j.HasOne<PagamentoEntity>()
+                    .WithMany()
+                    .HasForeignKey("PagamentoId")
+                    .HasConstraintName("FK_PagamentoTag_Pagamento")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<TagEntity>()
+                    .WithMany()
+                    .HasForeignKey("TagId")
+                    .HasConstraintName("FK_PagamentoTag_Tag")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j =>
+                {
+                    j.HasKey("PagamentoId", "TagId");
+                    j.ToTable("PagamentoTag");
+                });
     }
 }

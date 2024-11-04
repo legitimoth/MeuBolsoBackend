@@ -11,7 +11,8 @@ public class CartaoService(ICartaoRepository repository, IAuthService authServic
 
         await VerificarDuplicidade(cartaoManterDto.Nome, cartaoManterDto.Final, usuarioId);
 
-        var cartaoEntity = mapper.Map<CartaoEntity>(cartaoManterDto, opt => opt.Items["usuarioId"] = usuarioId);
+        var cartaoEntity = mapper.Map<CartaoEntity>(cartaoManterDto);
+        cartaoEntity.UsuarioId = usuarioId;
 
         await repository.AdicionarAsync(cartaoEntity);
         await unitOfWork.SaveAsync();

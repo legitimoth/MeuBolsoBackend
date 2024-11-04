@@ -2,55 +2,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeuBolsoBackend;
 
-public class TagRepository(AppDbContext context) : ITagRepository
+public class TagRepository : ITagRepository
 {
-    public async Task<TagEntity> AdicionarAsync(TagEntity tagEntity)
-    {
-        await context.Tags.AddAsync(tagEntity);
 
-        return tagEntity;
+    private readonly long _usuarioId;
+    private readonly DbSet<TagEntity> _context;
+
+    public TagRepository(AppDbContext context, IAuthService authService)
+    {
+        _usuarioId = authService.RecuperarId();
+        _context = context.Tags;
+    }
+
+    public async Task AdicionarAsync(List<TagEntity> tagsEntity)
+    {
+        tagsEntity.ForEach(t => t.UsuarioId = _usuarioId);
+        await _context.AddRangeAsync(tagsEntity);
+    }
+
+    public async Task<List<TagEntity>> RecuperarTodosAsync()
+    {
+        return await _context.Where(t => t.UsuarioId == _usuarioId)
+            .ToListAsync();
     }
     
-    public async Task<List<TagEntity>> AdicionarAsync(List<TagEntity> tagsEntity)
+    public async Task<List<TagEntity>> RecuperarPorNomesAsync(List<string> nomes)
     {
-        await context.Tags.AddRangeAsync(tagsEntity);
-
-        return tagsEntity;
-    }
-
-    public void Atualizar(TagEntity tagEntity)
-    {
-        context.Tags.Update(tagEntity);
-    }
-
-    public async Task<List<TagEntity>> RecuperarTodosPorUsuarioIdAsync(long usuarioId)
-    {
-        return await context.Tags.Where(t => t.UsuarioId == usuarioId)
+        return await _context
+            .Where(t => nomes.Contains(t.Nome) && t.UsuarioId == _usuarioId)
             .ToListAsync();
     }
 
-    public async Task<TagEntity?> RecuperarPorIdAsync(long id)
+    public async Task<bool> VerificarDuplicidade(string nome)
     {
-        return await context.Tags.FirstOrDefaultAsync(t => t.Id == id);
-    }
-    
-    public async Task<List<TagEntity>> RecuperarPorIdAsync(List<long> ids)
-    {
-        return await context.Tags.Where(t => ids.Contains(t.Id)).ToListAsync();
+        return await _context.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper() && t.UsuarioId == _usuarioId);
     }
 
-    public async Task<bool> ExistePorNomeEUsuarioIdAsync(string nome, long usuarioId)
+    public void Remover(List<TagEntity> tagsEntity)
     {
-        return await context.Tags.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper() && t.UsuarioId == usuarioId);
-    }
-
-    public async Task RemoverPorIdAsync(long id)
-    {
-        var tag = await context.Tags.FindAsync(id);
-
-        if(tag != null)
-        {
-            context.Tags.Remove(tag);
-        }
+        _context.RemoveRange(tagsEntity);
     }
 }
