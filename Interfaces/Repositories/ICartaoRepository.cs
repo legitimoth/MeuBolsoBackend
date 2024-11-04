@@ -6,7 +6,7 @@ public interface ICartaoRepository
     void Atualizar(CartaoEntity cartaoEntity);
     Task<CartaoEntity?> RecuperarPorIdAsync(long id);
     Task<bool> ExistePorIdAsync(long id);
-    Task<bool> ExistePorNomeEFinalEUsuarioIdAsync(string nome, string final, long usuarioId);
-    Task RemoverPorIdAsync(long id);
-    Task<List<CartaoEntity>> RecuperarTodosPorUsuarioIdAsync(long usuarioId);
+    Task<bool> ExistePorNomeEFinalAsync(string nome, string final);
+    void RemoverAsync(CartaoEntity cartaoEntity);
+    Task<List<CartaoEntity>> RecuperarTodosAsync();
 }

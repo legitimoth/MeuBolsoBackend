@@ -31,9 +31,9 @@ public class CartaoController(ICartaoService cartaoService) : ControllerBase
     }
 
     [HttpGet("usuarios")]
-    public async Task<ActionResult<CartaoDto>> RecuperarTodosPorUsuarioIdAsync()
+    public async Task<ActionResult<CartaoDto>> RecuperarTodosAsync()
     {
-        var cartaoDto = await cartaoService.RecuperarTodosPorUsuarioIdAsync();
+        var cartaoDto = await cartaoService.RecuperarTodosAsync();
 
         return Ok(cartaoDto);
     }

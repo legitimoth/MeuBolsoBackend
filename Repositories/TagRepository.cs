@@ -22,20 +22,25 @@ public class TagRepository : ITagRepository
 
     public async Task<List<TagEntity>> RecuperarTodosAsync()
     {
-        return await _context.Where(t => t.UsuarioId == _usuarioId)
+        return await _context.Where(t => t.UsuarioId.Equals(_usuarioId))
             .ToListAsync();
     }
     
     public async Task<List<TagEntity>> RecuperarPorNomesAsync(List<string> nomes)
     {
-        return await _context
-            .Where(t => nomes.Contains(t.Nome) && t.UsuarioId == _usuarioId)
-            .ToListAsync();
+        return await _context.Where(t => 
+            nomes.Select(n => n.ToUpper()).Contains(t.Nome.ToUpper()) && 
+            t.UsuarioId.Equals(_usuarioId)
+        )
+        .ToListAsync();
     }
 
     public async Task<bool> VerificarDuplicidade(string nome)
     {
-        return await _context.AnyAsync(t => t.Nome.ToUpper() == nome.ToUpper() && t.UsuarioId == _usuarioId);
+        return await _context.AnyAsync(t => 
+            t.Nome.ToUpper().Equals(nome.ToUpper()) && 
+            t.UsuarioId.Equals(_usuarioId)
+        );
     }
 
     public void Remover(List<TagEntity> tagsEntity)

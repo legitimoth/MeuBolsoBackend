@@ -5,5 +5,5 @@ public interface ICartaoService
     Task AtualizarAsync(long id, CartaoManterDto cartaoManterDto);
     Task<CartaoDto> RecuperarPorIdAsync(long id);
     Task RemoverPorIdAsync(long id);
-    Task<List<CartaoDto>> RecuperarTodosPorUsuarioIdAsync();
+    Task<List<CartaoDto>> RecuperarTodosAsync();
 }

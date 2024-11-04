@@ -2,50 +2,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeuBolsoBackend;
 
-public class CartaoRepository(AppDbContext context) : ICartaoRepository
+public class CartaoRepository : ICartaoRepository
 {
+    private readonly DbSet<CartaoEntity> _context;
+    private readonly long _usuarioId;
+    
+    public CartaoRepository(AppDbContext context, IAuthService authService)
+    {
+        _context = context.Cartoes;
+        _usuarioId = authService.RecuperarId();
+    }
+    
     public async Task<CartaoEntity> AdicionarAsync(CartaoEntity cartaoEntity)
     {
-        await context.Cartoes.AddAsync(cartaoEntity);
+        cartaoEntity.UsuarioId = _usuarioId;
+        await _context.AddAsync(cartaoEntity);
 
         return cartaoEntity;
     }
 
     public void Atualizar(CartaoEntity cartaoEntity)
     {
-        context.Cartoes.Update(cartaoEntity);
+        _context.Update(cartaoEntity);
     }
 
     public async Task<CartaoEntity?> RecuperarPorIdAsync(long id) {
-        return await context.Cartoes.FindAsync(id);
+        return await _context
+            .FirstOrDefaultAsync(c => c.Id.Equals(id) && c.UsuarioId.Equals(_usuarioId));
     }
 
     public async Task<bool> ExistePorIdAsync(long id)
     {
-        return await context.Cartoes.AnyAsync(u => u.Id.Equals(id));
+        return await _context.AnyAsync(u => u.Id.Equals(id) && u.UsuarioId.Equals(_usuarioId));
     }
 
-    public async Task<bool> ExistePorNomeEFinalEUsuarioIdAsync(string nome, string final, long usuarioId)
+    public async Task<bool> ExistePorNomeEFinalAsync(string nome, string final)
     {
-        return await context.Cartoes.AnyAsync(c =>
-            c.Nome.ToUpper() == nome.ToUpper() &&
+        return await _context.AnyAsync(c =>
+            c.Nome.ToUpper().Equals(nome.ToUpper()) &&
             c.Final.Equals(final) &&
-            c.UsuarioId.Equals(usuarioId)
+            c.UsuarioId.Equals(_usuarioId)
         );
     }
 
-    public async Task RemoverPorIdAsync(long id)
+    public void RemoverAsync(CartaoEntity cartaoEntity)
     {
-        var cartao = await context.Cartoes.FindAsync(id);
-
-        if(cartao != null)
-        {
-            context.Cartoes.Remove(cartao);
-        }
+        _context.Remove(cartaoEntity);
     }
 
-    public async Task<List<CartaoEntity>> RecuperarTodosPorUsuarioIdAsync(long usuarioId)
+    public async Task<List<CartaoEntity>> RecuperarTodosAsync()
     {
-        return await context.Cartoes.Where(c => c.UsuarioId == usuarioId).ToListAsync();
+        return await _context.Where(c => c.UsuarioId.Equals(_usuarioId)).ToListAsync();
     }
 }
