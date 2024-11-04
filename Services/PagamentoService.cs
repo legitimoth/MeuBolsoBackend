@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 
 namespace MeuBolsoBackend;
@@ -6,12 +7,15 @@ public class PagamentoService(
     IPagamentoRepository repository, 
     IMapper mapper, 
     IUnitOfWork unitOfWork,
-    IPagamentoTagService pagamentoTagService
+    IPagamentoTagService pagamentoTagService,
+    ICartaoRepository cartaoRepository
     ) : IPagamentoService
 {
 
     public async Task<PagamentoDto> AdicionarAsync(PagamentoManterDto pagamentoManterDto)
     {
+        await Validar(pagamentoManterDto);
+        
         var pagamentoEntity = mapper.Map<PagamentoEntity>(pagamentoManterDto);
         
         await pagamentoTagService.AdicionarTags(pagamentoEntity, pagamentoManterDto.Tags);
@@ -66,5 +70,15 @@ public class PagamentoService(
         
         repository.Atualizar(pagamentoEntity);
         await unitOfWork.SaveAsync();
+    }
+    
+    private async Task Validar(PagamentoManterDto pagamentoManterDto)
+    {
+        if (
+            pagamentoManterDto.CartaoId != null &&
+            !await cartaoRepository.ExistePorIdAsync(pagamentoManterDto.CartaoId.Value))
+        {
+            throw new NotFoundException(Message.CartaoNaoEncontrado);
+        }
     }
 }

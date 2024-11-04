@@ -22,9 +22,6 @@ public class PagamentoConfiguration : IEntityTypeConfiguration<PagamentoEntity>
         builder.Property(p => p.UsuarioId)
             .IsRequired();
 
-        builder.Property(p => p.TipoPagamentoId)
-            .IsRequired();
-
         // Configurando propriedades opcionais
         builder.Property(p => p.Descricao)
             .HasMaxLength(500); // Opcional: definir um tamanho máximo
@@ -41,6 +38,9 @@ public class PagamentoConfiguration : IEntityTypeConfiguration<PagamentoEntity>
         builder.Property(p => p.Cancelado)
             .HasDefaultValue(false);
 
+        builder.Property(p => p.TipoPagamentoId)
+            .IsRequired();
+        
         // Configurando o relacionamento com TipoPagamentoEntity
         builder.HasOne(p => p.TipoPagamento)
             .WithMany() // Presumindo que TipoPagamentoEntity não tem uma coleção de Pagamentos
@@ -67,5 +67,15 @@ public class PagamentoConfiguration : IEntityTypeConfiguration<PagamentoEntity>
                     j.HasKey("PagamentoId", "TagId");
                     j.ToTable("PagamentoTag");
                 });
+        
+        builder.Property(p => p.CartaoId)
+            .IsRequired();
+        
+        // Configurando o relacionamento com Cartao
+        builder.HasOne(p => p.Cartao)
+            .WithMany() // Presumindo que Cartão não tem uma coleção de Pagamentos
+            .HasForeignKey(p => p.CartaoId)
+            .OnDelete(DeleteBehavior.Restrict); // Evita exclusão em cascata
+        
     }
 }

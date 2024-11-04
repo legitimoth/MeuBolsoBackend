@@ -28,5 +28,14 @@ public class PagamentoValidator : AbstractValidator<PagamentoManterDto>
             .IsInEnum().WithMessage(Message.CampoInvalido.Bind("TipoPagamentoId"));
         
         RuleForEach(x => x.Tags).SetValidator(new TagValidator());
+        
+        RuleFor(p => p.CartaoId)
+            .NotNull().WithMessage(Message.CartaoObrigatorio)
+            .When(p => p.TipoPagamentoId == TipoPagamentoEnum.Cartao);
+        
+        RuleFor(p => p.CartaoId)
+            .Must(cartaoId => cartaoId == null)
+            .WithMessage(Message.CartaoDesnecessario)
+            .When(p => p.TipoPagamentoId != TipoPagamentoEnum.Cartao);
     }
 }

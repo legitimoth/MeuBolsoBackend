@@ -17,8 +17,13 @@ public static class Message
     #endregion
 
     #region Cartao
+
+    public const string CartaoNaoEncontrado = "O cartão não foi encontrado.";
     public const string CartaoFinalInvalido = "O campo Final deve conter exatamente 4 dígitos numéricos.";
     public const string CartaoDuplicado = "O cartão que você está tentando adicionar já existe.";
+    public const string CartaoObrigatorio = "O cartão deve ser informado.";
+
+    public const string CartaoDesnecessario = "O cartão só deve ser preenchido para o tipo de pagamento 'Cartão'.";
     #endregion
     
     #region Pagamento

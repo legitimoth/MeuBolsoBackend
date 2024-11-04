@@ -12,5 +12,7 @@ public class PagamentoEntity {
     public required int TipoPagamentoId { get; set; }
     public List<TagEntity> Tags { get; set; } = [];
     public required long UsuarioId { get; set; }
+    public CartaoEntity? Cartao { get; set; }
+    public long? CartaoId { get; set; }
     public bool Cancelado { get; set; } = false;
 }

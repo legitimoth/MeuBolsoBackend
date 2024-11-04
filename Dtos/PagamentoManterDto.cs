@@ -10,4 +10,5 @@ public record PagamentoManterDto
     public int? Parcelas { get; set; } = null;
     public TipoPagamentoEnum TipoPagamentoId { get; set; }
     public List<TagDto> Tags { get; set; } = [];
+    public long? CartaoId { get; set; }
 }
