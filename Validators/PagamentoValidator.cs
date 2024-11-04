@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace MeuBolsoBackend;
 
-public class PagamentoManterDtoValidator : AbstractValidator<PagamentoManterDto>
+public class PagamentoValidator : AbstractValidator<PagamentoManterDto>
 {
-    public PagamentoManterDtoValidator()
+    public PagamentoValidator()
     {
         RuleFor(x => x.Nome)
             .NotEmpty().WithMessage(Message.CampoObrigatorio.Bind("Nome"))
@@ -26,5 +26,7 @@ public class PagamentoManterDtoValidator : AbstractValidator<PagamentoManterDto>
 
         RuleFor(p => p.TipoPagamentoId)
             .IsInEnum().WithMessage(Message.CampoInvalido.Bind("TipoPagamentoId"));
+        
+        RuleForEach(x => x.Tags).SetValidator(new TagValidator());
     }
 }
