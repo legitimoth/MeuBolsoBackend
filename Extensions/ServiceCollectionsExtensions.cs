@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuBolsoBackend;
@@ -27,7 +28,7 @@ public static class ServiceCollectionsExtensions
         {
             options.SuppressModelStateInvalidFilter = true;
         });
-
+        
         services.AddControllers(options =>
         {
             options.SuppressAsyncSuffixInActionNames = false;
@@ -49,7 +50,6 @@ public static class ServiceCollectionsExtensions
 
             // Configuração do OAuth2 com Auth0
             var auth0Domain = configuration["Auth0:Domain"];
-            var auth0ClientId = configuration["Auth0:Api:ClientId"];
 
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {

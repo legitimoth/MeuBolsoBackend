@@ -6,13 +6,14 @@ public class AuthenticationMiddleware(RequestDelegate next)
     {
         await next(httpContext);
 
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+        switch (httpContext.Response.StatusCode)
         {
-            await HandleUnauthorizedAsync(httpContext);
-        }
-        else if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
-        {
-            await HandleForbiddenAsync(httpContext);
+            case StatusCodes.Status401Unauthorized:
+                await HandleUnauthorizedAsync(httpContext);
+                break;
+            case StatusCodes.Status403Forbidden:
+                await HandleForbiddenAsync(httpContext);
+                break;
         }
     }
 

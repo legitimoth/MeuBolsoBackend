@@ -12,10 +12,9 @@ public static class ApplicationBuilderExtensions
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", app.Configuration["App:Name"]);
                 c.RoutePrefix = string.Empty; // Swagger UI na raiz
 
-                var auth0Domain = app.Configuration["Auth0:Domain"];
-                var auth0ClientId = app.Configuration["Auth0:Api:ClientId"];
+                var auth0ClientId = app.Configuration["Auth0:App:ClientId"];
                 var auth0Audience = app.Configuration["Auth0:Api:Audience"];
-
+                
                 c.OAuthClientId(auth0ClientId);
                 c.OAuthAppName($"{app.Configuration["App:Name"]} - Swagger");
                 c.OAuthUsePkce(); // Habilita PKCE

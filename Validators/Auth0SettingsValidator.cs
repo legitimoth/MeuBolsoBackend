@@ -28,16 +28,20 @@ public class Auth0ApiSettingsValidator : AbstractValidator<Auth0ApiSettings>
 {
     public Auth0ApiSettingsValidator()
     {
-        RuleFor(x => x.ClientId)
-            .NotEmpty().WithMessage(Message.Auth0NaoConfigurado.Bind("Api ClientId"));
-
         RuleFor(x => x.Audience)
             .NotEmpty().WithMessage(Message.Auth0NaoConfigurado.Bind("Api Audience"));
-
-        RuleFor(x => x.ClientSecret)
-            .NotEmpty().WithMessage(Message.Auth0NaoConfigurado.Bind("Api ClientSecret"));
     }
 }
+
+public class Auth0AppSettingsValidator : AbstractValidator<Auth0AppSettings>
+{
+    public Auth0AppSettingsValidator()
+    {
+        RuleFor(x => x.ClientId)
+            .NotEmpty().WithMessage(Message.Auth0NaoConfigurado.Bind("Application ClientId"));
+    }
+}
+
 
 // Validador para a classe M2MSettings
 public class Auth0M2MSettingsValidator : AbstractValidator<Auth0M2MSettings>
