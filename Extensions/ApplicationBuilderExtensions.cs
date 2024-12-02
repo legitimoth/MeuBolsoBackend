@@ -28,6 +28,7 @@ public static class ApplicationBuilderExtensions
         app.UseHttpsRedirection();
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseMiddleware<AuthenticationMiddleware>();
+        app.UseCors("AllowLocalhost4200");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseHttpsRedirection();

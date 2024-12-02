@@ -16,6 +16,7 @@ public static class ServiceCollectionsExtensions
         DbContext(services, configuration);
         Auth(services, configuration);
         Swagger(services, configuration);
+        Cors(services, configuration);
 
         // Outros serviços
         services.RegisterServices();
@@ -39,6 +40,20 @@ public static class ServiceCollectionsExtensions
         services.AddOpenApi();
 
         return services;
+    }
+
+    private static void Cors(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost4200", policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials(); // Se necessário, para cookies ou autenticação
+            });
+        });
     }
 
     private static void Swagger(IServiceCollection services, IConfiguration configuration)
